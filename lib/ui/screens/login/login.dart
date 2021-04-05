@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:touchit_app/src/styles/styles.dart';
+import 'package:touchit_app/constants/styles/styles.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

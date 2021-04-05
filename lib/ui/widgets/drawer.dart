@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:touchit_app/services/Routes.dart';
-import 'package:touchit_app/src/utils/Data.dart';
+import 'package:touchit_app/Routes.dart';
+import 'package:touchit_app/constants/utils/data.dart';
 
 class CommonDrawer extends StatelessWidget {
   @override

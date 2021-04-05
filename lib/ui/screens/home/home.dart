@@ -1,8 +1,8 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:touchit_app/src/screens/home/delayed_animation.dart';
+import 'package:touchit_app/ui/screens/home/delayed_animation.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:touchit_app/src/screens/widgets/drawer.dart';
+import 'package:touchit_app/ui/widgets/drawer.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 

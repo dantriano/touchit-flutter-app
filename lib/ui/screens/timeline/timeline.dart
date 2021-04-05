@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:touchit_app/src/screens/timeline/calendar.dart';
-import 'package:touchit_app/src/screens/widgets/drawer.dart';
+import 'package:touchit_app/ui/screens/timeline/calendar.dart';
+import 'package:touchit_app/ui/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 
 class TimeLine extends StatefulWidget {

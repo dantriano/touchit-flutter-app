@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:touchit_app/src/screens/home/home.dart';
-import 'package:touchit_app/src/screens/login/login.dart';
-import 'package:touchit_app/src/screens/timeline/timeline.dart';
-import 'package:touchit_app/src/styles/styles.dart';
+import 'package:touchit_app/ui/screens/home/home.dart';
+import 'package:touchit_app/ui/screens/login/login.dart';
+import 'package:touchit_app/ui/screens/timeline/timeline.dart';
+import 'package:touchit_app/constants/styles/styles.dart';
 
 const R_TEST = '/';
 const R_LOGIN = '/login';
