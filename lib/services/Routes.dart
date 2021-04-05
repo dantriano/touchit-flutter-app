@@ -16,7 +16,7 @@ class Routes {
       Widget screen;
       switch (settings.name) {
         case R_TEST:
-          screen = Theme(data: Style.theme(), child: Home());
+          screen = Theme(data: Style.theme(), child: LoginScreen());
           break;
         case R_LOGIN:
           screen = Theme(data: Style.theme(), child: LoginScreen());

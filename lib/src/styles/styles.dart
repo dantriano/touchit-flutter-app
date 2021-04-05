@@ -1,5 +1,28 @@
 import 'package:flutter/material.dart';
 
+final kHintTextStyle = TextStyle(
+  color: Colors.white54,
+  fontFamily: 'OpenSans',
+);
+
+final kLabelStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'OpenSans',
+);
+
+final kBoxDecorationStyle = BoxDecoration(
+  color: Color(0xFF6CA8F1),
+  borderRadius: BorderRadius.circular(10.0),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 6.0,
+      offset: Offset(0, 2),
+    ),
+  ],
+);
+
 class Style {
   static const LargeTextSize = 26.0;
   static const MediumTextSize = 15.0;
@@ -69,8 +92,7 @@ class Style {
   }
 
   static ThemeData theme() {
-    var themeData = ThemeData(
-        textTheme: TextTheme());
+    var themeData = ThemeData(textTheme: TextTheme());
     return themeData;
   }
 }

@@ -74,6 +74,11 @@ flutter:
           weight: 300
         - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 600
+
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans.ttf
+          weight: 300
   # fonts:
   #   - family: Schyler
   #     fonts:
