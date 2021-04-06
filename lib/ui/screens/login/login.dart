@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:touchit_app/constants/styles/styles.dart';
+import 'package:touchit_app/core/models/User.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:touchit_app/core/services/graphql.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,6 +12,34 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
+  void query() async {
+    print('2');
+    GraphQLClient _client = Graphql.clientToQuery();
+    QueryResult result = await _client.query(
+        QueryOptions(document: gql(User.test), variables: User.variables));
+    print(result);
+  }
+
+  Widget queryBuild() {
+    return Query(
+      options:
+          QueryOptions(document: gql(User.test), variables: User.variables),
+      // Just like in apollo refetch() could be used to manually trigger a refetch
+      // while fetchMore() can be used for pagination purpose
+      builder: (QueryResult result,
+          {VoidCallback refetch, FetchMore fetchMore}) {
+        if (result.hasException) {
+          print(result.exception.toString());
+        }
+
+        if (result.isLoading) {
+          print("loading");
+        }
+        // it can be either Map or List
+        return Text(result.data['login']['firstName']);
+      },
+    );
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -127,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () => query(),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -296,6 +327,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
                       _buildLoginBtn(),
+                      queryBuild(),
                       _buildSignInWithText(),
                       _buildSocialBtnRow(),
                       _buildSignupBtn(),

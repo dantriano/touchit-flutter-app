@@ -37,7 +37,6 @@ dependencies:
   overlay_support: ^0.0.1
   flutter_date_pickers: any
   graphql_flutter: ^4.0.1
-  flutter_config: ^1.0.8
 
 dev_dependencies:
   flutter_test:

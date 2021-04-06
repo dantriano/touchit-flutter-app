@@ -3,12 +3,10 @@ import 'package:touchit_app/constants/styles/styles.dart';
 import 'package:touchit_app/Routes.dart';
 import 'package:touchit_app/core/services/graphql.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:flutter_config/flutter_config.dart';
 
 void main() async {
-  await FlutterConfig.loadEnvVariables();
+  //WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
