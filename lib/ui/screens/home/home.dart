@@ -1,5 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:touchit_app/core/models/User.dart';
 import 'package:touchit_app/ui/screens/home/delayed_animation.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:touchit_app/ui/widgets/drawer.dart';
@@ -118,6 +120,7 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
         SizedBox(
           height: 20.0,
         ),
+        queryBuild(),
         Text(
           _clock.date,
           textAlign: TextAlign.center,
@@ -428,5 +431,21 @@ class HomeState extends State<Home> with SingleTickerProviderStateMixin {
             children: listServices,
           );
         });
+  }
+
+  Widget queryBuild() {
+    return Query(
+      options: QueryOptions(document: User.list),
+      builder: (QueryResult result,
+          {VoidCallback refetch, FetchMore fetchMore}) {
+        if (result.hasException) {
+          return Text('No hay nada');
+        }
+        if (result.isLoading) {
+          print("loading");
+        }
+        return Text('ok');
+      },
+    );
   }
 }

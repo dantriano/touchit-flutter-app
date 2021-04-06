@@ -1,5 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:touchit_app/core/services/shared_preferences_service.dart';
 
 class Graphql {
   /* Connection by Socket
@@ -15,34 +16,23 @@ class Graphql {
   );
   static final Link link = authLink.concat(httpLink).concat(websocketLink);
   */
-  static final String _token = 'token';
   static final HttpLink httpLink = HttpLink(
     'http://localhost:5000/api',
   );
-  static final AuthLink authLink = AuthLink(getToken: () async => _token);
-  static final Link link = authLink.concat(httpLink);
-
-  static ValueNotifier<GraphQLClient> initailizeClient(String token) {
-    final AuthLink authLink = AuthLink(getToken: () async => _token);
-    final Link link = authLink.concat(httpLink);
+  static ValueNotifier<GraphQLClient> initailizeClient() {
     // We're using HiveStore for persistence,
     ValueNotifier<GraphQLClient> client = ValueNotifier(
-      GraphQLClient(
-          link: link,
-          // The default store is the InMemoryStore, which does NOT persist to disk
-          cache: GraphQLCache(
-            store: HiveStore(),
-          )
-          //cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject),
-          ),
+      getClient(),
     );
-
     return client;
   }
 
-  static GraphQLClient clientToQuery() {
+  static GraphQLClient getClient() {
+    final AuthLink authLink =
+        AuthLink(getToken: () async => sharedPreferenceService.token);
+    final Link link = authLink.concat(httpLink);
     return GraphQLClient(
-      link: Graphql.link,
+      link: link,
       cache: GraphQLCache(
         store: HiveStore(),
       ),

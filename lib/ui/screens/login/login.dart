@@ -4,6 +4,7 @@ import 'package:touchit_app/constants/styles/styles.dart';
 import 'package:touchit_app/core/models/User.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:touchit_app/core/services/graphql.dart';
+import 'package:touchit_app/core/services/shared_preferences_service.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,33 +13,28 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
-  void query() async {
-    print('2');
-    GraphQLClient _client = Graphql.clientToQuery();
-    QueryResult result = await _client.query(
-        QueryOptions(document: gql(User.test), variables: User.variables));
-    print(result);
-  }
+  String emailText = "";
+  String passText = "";
 
-  Widget queryBuild() {
-    return Query(
-      options:
-          QueryOptions(document: gql(User.test), variables: User.variables),
-      // Just like in apollo refetch() could be used to manually trigger a refetch
-      // while fetchMore() can be used for pagination purpose
-      builder: (QueryResult result,
-          {VoidCallback refetch, FetchMore fetchMore}) {
-        if (result.hasException) {
-          print(result.exception.toString());
-        }
+  void _login() async {
+    String _token;
+    GraphQLClient _client = Graphql.getClient();
+    QueryResult result = await _client.query(QueryOptions(
+        document: User.loginQuery,
+        variables: User.getCredentials(emailText, passText)));
+    _token = (result.hasException || result.data == null)
+        ? null
+        : result.data['login']['token'];
 
-        if (result.isLoading) {
-          print("loading");
-        }
-        // it can be either Map or List
-        return Text(result.data['login']['firstName']);
-      },
-    );
+    if (_token != null) {
+      //UtilFs.showToast("Login Successful", context);
+      await sharedPreferenceService.setToken(_token);
+      Graphql.initailizeClient();
+      Navigator.pushReplacementNamed(context, "/home");
+    } else {
+      //UtilFs.showToast("Login Failed", context);
+      FocusScope.of(context).requestFocus(new FocusNode());
+    }
   }
 
   Widget _buildEmailTF() {
@@ -56,6 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: TextField(
             keyboardType: TextInputType.emailAddress,
+            onChanged: (x) {
+              emailText = x;
+            },
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -91,6 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60.0,
           child: TextField(
             obscureText: true,
+            onChanged: (x) {
+              passText = x;
+            },
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -158,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => query(),
+        onPressed: () => _login(),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -327,7 +329,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
                       _buildLoginBtn(),
-                      queryBuild(),
                       _buildSignInWithText(),
                       _buildSocialBtnRow(),
                       _buildSignupBtn(),

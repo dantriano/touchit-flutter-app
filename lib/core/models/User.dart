@@ -1,3 +1,5 @@
+import 'package:graphql_flutter/graphql_flutter.dart';
+
 class User {
   int id;
   String task = "";
@@ -17,7 +19,7 @@ class User {
     return jsonData;
   }
 
-  static String fragment = """
+  static final fragment = gql("""
   fragment userFragment on User {
       __typename
       _id
@@ -35,24 +37,39 @@ class User {
       }
       token
     }
-""";
-  static Map<String, Map<String, String>> variables = {
-    "input": {"email": "admin@admin.com", "password": "1234"}
-  };
-  static String test = """
+""");
+  static Map<String, Map<String, String>> getCredentials(email, pass) => {
+        "input": {"email": "admin@admin.com", "password": "1234"}
+      };
+  static final loginQuery = gql('''
   query login(\$input: userInput!) {
       login(input: \$input) {
         firstName
         lastName
+        token
       }
     }
-""";
-  static String loginQuery = """
+''');
+  static final list = gql('''
+  query employees(\$input:employeeInput){
+      employees(input:\$input) {
+        _id
+        firstName
+        email
+    		company
+    		_groups{
+          name
+        }
+      }
+    }
+    
+    
+''');
+  /* = gql('''
   query login(\$input: userInput!) {
       login(input: \$input) {
         ...userFragment
       }
     }
-    \${this.fragment}
-""";
+''')..definitions.addAll(User.fragment.definitions);*/
 }

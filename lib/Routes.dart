@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:touchit_app/ui/screens/home/home.dart';
 import 'package:touchit_app/ui/screens/login/login.dart';
 import 'package:touchit_app/ui/screens/timeline/timeline.dart';
 import 'package:touchit_app/constants/styles/styles.dart';
+
+import 'core/services/graphql.dart';
+import 'core/services/shared_preferences_service.dart';
 
 const R_TEST = '/';
 const R_LOGIN = '/login';
@@ -10,6 +14,18 @@ const R_HOME = '/home';
 const R_TIMELINE = '/timeline';
 
 class Routes {
+  static FutureBuilder loadGraphql(screen) {
+    return FutureBuilder<String>(
+        future: sharedPreferenceService.token,
+        builder: (BuildContext ctx, AsyncSnapshot<String> snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error);
+          }
+          return GraphQLProvider(
+              client: Graphql.initailizeClient(), child: screen);
+        });
+  }
+
   static RouteFactory routes() {
     return (settings) {
       //final Map<String, dynamic> arguments = settings.arguments;
@@ -36,7 +52,8 @@ class Routes {
           screen = Theme(data: Style.theme(), child: Home());
           return null;
       }
-      return MaterialPageRoute(builder: (BuildContext context) => screen);
+      return MaterialPageRoute(
+          builder: (BuildContext context) => loadGraphql(screen));
     };
   }
 }
